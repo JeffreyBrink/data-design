@@ -32,5 +32,6 @@
 			<li>Ted logs in later to see that he has recieved 274 claps</li>
 			<li>Ted is happy</li>
 		</ul>
+		<h2>Medium's attributes and Elements</h2>
 	</body>
 </html>
