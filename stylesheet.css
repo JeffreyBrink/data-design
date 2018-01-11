@@ -4,3 +4,10 @@ h1 {
 	text-shadow: 4px 4px 2px rgb(255, 137, 0);
 }
 
+h2 {
+	font-size: 80px;
+	text-align: -moz-center;
+	text-shadow: 4px 4px 2px rgb(255, 137, 0);
+}
+
+
