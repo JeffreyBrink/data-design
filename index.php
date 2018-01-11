@@ -24,14 +24,37 @@
 		</h2>
 		<h2>Interaction flow:</h2>
 		<ul>
-			<li>Ted logs into his account</li>
-			<li>Ted clicks the button to create a blog post.</li>
-			<li>Ted writes his blog post</li>
-			<li>Ted clicks button to post his new blog.</li>
-			<li>Ted logs out</li>
-			<li>Ted logs in later to see that he has recieved 274 claps</li>
-			<li>Ted is happy</li>
+			<li>Ted logs into his account---site gives him user account page</li>
+			<li>Ted clicks the button to create a blog post---site gives him create new post page</li>
+			<li>Ted writes his blog post---site is ambivalent</li>
+			<li>Ted clicks button to post his new blog---site posts new blog</li>
+			<li>Ted logs out--site shows you are logged off page</li>
+			<li>Ted repeats process---site shows that he has recieved 274 claps</li>
+			<li>Ted is happy---site will miss ted</li>
 		</ul>
-		<h2>Medium's attributes and Elements</h2>
+		<h2>Entities and attributes</h2>
+			<h2>profile</h2>
+		<ul>
+			<li>Profield (primary, uuid)</li>
+			<li>activation token</li>
+			<li>profileEmail</li>
+			<li>ProfilePhone</li>
+			<li>profile#</li>
+			<li>profileSalt</li>
+		</ul>
+		<br>
+		<h2>Medium</h2>
+		<ul>
+			<li>Mediumid (primary key)</li>
+			<li>MediumProfield (foriegn key)</li>
+			<li>clapmediumid</li>
+			<li>Blogcontent</li>
+			<li>blogdate</li>
+		</ul>
+		<h2>Relations</h2>
+		<ul>
+			<li>One profile can write many blog posts (1 to N)</li>
+			<li>Many tweets can be clapped by many profiles (M to N)</li>
+		</ul>
 	</body>
 </html>
