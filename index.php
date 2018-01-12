@@ -59,6 +59,7 @@
 		<h2>Relations</h2>
 		<ul>
 			<li>One profile can write many blog posts (1 to N)</li>
+			<li>Many blog posts can only be written by one profile M to 1)</li>
 			<li>Many blogs can be clapped by many profiles (M to N)</li>
 		</ul>
 	</body>
