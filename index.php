@@ -30,31 +30,31 @@
 			<li>Ted clicks button to post his new blog---site posts new blog</li>
 			<li>Ted logs out--site shows you are logged off page</li>
 			<li>Ted repeats process---site shows that he has recieved 274 claps</li>
-			<li>Ted is happy---site will miss ted</li>
+			<li>Ted is happy---site forgets Ted</li>
 		</ul>
 		<h2>Entities and attributes</h2>
 		<h2>profile</h2>
 		<ul>
-			<li>Profield (primary, uuid)</li>
-			<li>activation token</li>
+			<li>ProfieId (primary, uuid)</li>
+			<li>activationToken</li>
 			<li>profileEmail</li>
 			<li>ProfilePhone</li>
-			<li>profile#</li>
+			<li>profileHash</li>
 			<li>profileSalt</li>
 		</ul>
 		<br>
 		<h2>Blog</h2>
 		<ul>
-			<li>blogid (primary key)</li>
-			<li>blogProfield (foriegn key)</li>
-			<li>blogcontent</li>
-			<li>blogdate</li>
+			<li>blogId (primary key)</li>
+			<li>blogProfileId (foriegn key)</li>
+			<li>blogContent</li>
+			<li>blogDate</li>
 		</ul>
 		<h2>Clap</h2>
 		<ul>
-			<li>clapid (primary key)</li>
-			<li>blogid (foriegn key)</li>
-			<li>profileid</li>
+			<li>clapId (primary key)</li>
+			<li>blogId (foriegn key)</li>
+			<li>profileId (foriegn key)</li>
 		</ul>
 		<h2>Relations</h2>
 		<ul>
