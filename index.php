@@ -61,7 +61,7 @@
 			<li>One profile can write many blog posts (1 to N)</li>
 			<li>Blog posts can only be written by one profile M to 1)</li>
 			<li>Many blogs can be clapped by many profiles (M to N)</li>
-			<li>many profiles can make one clap (1 to m)</li>
+			<li>many profiles can make one clap (M to 1)</li>
 		</ul>
 	</body>
 </html>
