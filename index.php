@@ -53,10 +53,8 @@
 		<h2>Clap</h2>
 		<ul>
 			<li>clapid (primary key)</li>
-			<li>claptime</li>
-			<li>clapdate</li>
-			<li>claphistory</li>
-			<li>clapfrequency</li>
+			<li>blogid (foriegn key)</li>
+			<li>profileid</li>
 		</ul>
 		<h2>Relations</h2>
 		<ul>
