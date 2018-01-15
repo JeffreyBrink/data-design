@@ -63,8 +63,10 @@
 			<li>Many blogs can be clapped by many profiles (M to N)</li>
 			<li>many profiles can make one clap (M to 1)</li>
 		</ul>
-	<div><img src="data-design-erd-chart.jpg" alt="erd chart">
-	</div>
+		<br>
+		<h1>Entity Relationship Chart</h1>
+	><div><img src="data-design-erd-chart.jpg" alt="erd chart">
+	</div
 
 	</body>
 </html>
