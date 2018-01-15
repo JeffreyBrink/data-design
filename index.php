@@ -46,7 +46,7 @@
 		<h2>Blog</h2>
 		<ul>
 			<li>blogId (primary key)</li>
-			<li>blogProfileId (foriegn key)</li>
+			<li>blogProfileId</li>
 			<li>blogContent</li>
 			<li>blogDate</li>
 		</ul>
@@ -63,6 +63,7 @@
 			<li>Many blogs can be clapped by many profiles (M to N)</li>
 			<li>many profiles can make one clap (M to 1)</li>
 		</ul>
+
 
 	</body>
 </html>
