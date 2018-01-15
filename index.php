@@ -65,7 +65,7 @@
 		</ul>
 		<br>
 		<h1>Entity Relationship Chart</h1>
-	><div><img src="data-design-erd-chart.jpg" alt="erd chart">
+	<div><img src="erd-chart.jpg" alt="erd chart">
 	</div
 
 	</body>
