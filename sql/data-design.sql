@@ -1,4 +1,3 @@
-
 CREATE TABLE profile (
 	profileId BINARY(16) NOT NULL,
 	profileActivationToken CHAR(32),
@@ -6,7 +5,7 @@ CREATE TABLE profile (
 	profilePhone VARCHAR(32),
 	profileHash     CHAR(128) NOT NULL,
 	profileSalt CHAR(64) NOT NULL,
-	UNIQUE(profileId),
+	UNIQUE(profileEmail),
 	PRIMARY KEY(profileId)
 );
 
@@ -31,3 +30,5 @@ CREATE TABLE clap (
 	FOREIGN KEY(clapBlogId) REFERENCES blog(blogId),
 	PRIMARY KEY(clapProfileId, clapBlogId)
 );
+
+
