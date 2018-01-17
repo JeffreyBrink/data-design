@@ -3,7 +3,7 @@ CREATE TABLE profile (
 	profileActivationToken CHAR(32),
 	profileEmail VARCHAR(128) NOT NULL,
 	profilePhone VARCHAR(32),
-	profileHash     CHAR(128) NOT NULL,
+	profileHash CHAR(128) NOT NULL,
 	profileSalt CHAR(64) NOT NULL,
 	UNIQUE(profileEmail),
 	PRIMARY KEY(profileId)
@@ -17,18 +17,19 @@ CREATE TABLE blog (
 	profileId int,
 	PRIMARY KEY(blogId),
 	FOREIGN KEY (profileId) REFERENCES profile(profileId)
-
 );
 
 CREATE TABLE clap (
 	clapProfileId BINARY(16) NOT NULL,
 	clapBlogID BINARY(16) NOT NULL,
 	clapId DATETIME(6) NOT NULL,
-	INDEX (clapProfileId) ,
+	INDEX (clapProfileId),
 	INDEX (clapBlogId),
 	FOREIGN KEY(clapProfileId) REFERENCES profile(profileId),
-	FOREIGN KEY(clapBlogId) REFERENCES blog(blogId),
+	FOREIGN KEY(clapBlogId) REFERENCES blog(BlogId),
 	PRIMARY KEY(clapProfileId, clapBlogId)
 );
+
+
 
 
