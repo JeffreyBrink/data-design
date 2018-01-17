@@ -1,2 +1,4 @@
+SELECT profileId FROM profile
+
 
 
