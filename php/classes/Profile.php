@@ -1,7 +1,7 @@
 <?php
 namespace Edu\Cnm\DataDesign;
 require_once("autoload.php");
-require_once(dirname(__DIR__›) . "autoload.php");
+require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
 use Ramsey\Uuid\Uuid;
 /**
  * Cross Section of a "Medium" Profile
@@ -31,11 +31,6 @@ class Profile {
 	 **/
 	private $profileActivationToken;
 	/**
-	 * caption: this would most likely be stored in a different database...but I included it in my preliminary design here...
-	 * @var string $profileCaption
-	 **/
-	private $profileCaption;
-	/**
 	 * email associated with this profile; this is a unique index
 	 * @var string $profileEmail
 	 **/
@@ -55,6 +50,36 @@ class Profile {
 	 * @var string $profileSalt
 	 **/
 	private $profileSalt;
+
+	/**
+	 * constructor for this Profile
+	 *
+	 * @param string|Uuid $newProfileId id of this Profile or null if a new Profile
+	 * @param string $newProfileActivationToken activation token to safe guard against malicious accounts
+	 * @param string $newProfileFullName string containing newProfileFullName
+	 * @param string $newProfileCaption string containing newProfileCaption can be null
+	 * @param string $newProfileEmail string containing email
+	 * @param string $newProfileHash string containing password hash
+	 * @param string $newProfilePhone string containing phone number
+	 * @param string $newProfileSalt string containing passowrd salt
+	 * @throws \InvalidArgumentException if data types are not valid
+	 * @throws \RangeException if data values are out of bounds (e.g., strings too long, negative integers)
+	 * @throws \TypeError if a data type violates a data hint
+	 * @throws \Exception if some other exception occurs
+	 * @Documentation https://php.net/manual/en/language.oop5.decon.php
+	 **/
+	public function _construct($newProfileId, ?string $newProfileActivationToken, string $newProfileFullName, string $newProfileEmail, string $newProfileHash, ?string $newProfilePhone, string $newProfileSalt) {
+		try {
+			$this->setProfileId($newProfileId);
+			$this->setProfileActivationToken($newProfileActivationToken);
+			$this->setProfileFullName($newProfileFullName);
+			$this->setProfileEmail($newProfileEmail);
+			$this->setProfileHash($newProfileHash);
+			$this->setProfilePhone($newProfilePhone);
+			$this->setProfileSalt($newProfileSalt);
+		} catch(\InvalidArgumentException | \RangeException |\TypeError | \Exception $exception) {
+	}
+	}
 	/**
 	 * accessor method for getting profileId
 	 *
@@ -70,7 +95,7 @@ class Profile {
 	 * @throws \RangeException if $newProfileId is not positive
 	 * @throws \TypeError id profile id is not positive
 	 **/
-	public function setProfileId( newProfileId): void {
+	public function setProfileId($newProfileId): void {
 		try {
 			$uuid = self::validateUuid($newProfileId);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
@@ -140,36 +165,6 @@ class Profile {
 			throw(new\RangeException("user activation token has to be 32"));
 		}
 		$this->profileActivationToken = $newProfileActivationToken;
-	}
-	/**
-	 * accessor method for profile caption
-	 *
-	 * @return string value of profile caption
-	 **/
-	public function getProfileCaption() :string {
-		return($this->profileCaption);
-	}
-	/**
-	 * mutator method for profile caption
-	 *
-	 * @param string $newProfileCaption new value of profile caption
-	 * @throws \InvalidArgumentException if $newProfileCaption is not a string or insecure
-	 * @throws \RangeException if $newProfileCaption is > 140 characters
-	 * @throws \TypeError if $newProfileCaption is not a string
-	 **/
-	public function setProfileCaption(string $newProfileCaption) : void {
-		// verify the profile caption is secure
-		$newProfileCaption = trim($newProfileCaption);
-		$newProfileCaption = filter_var($newProfileCaption, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileCaption) === true) {
-			throw(new \InvalidArgumentException("tweet content is empty or insecure"));
-		}
-		// verify the tweet content will fit in the database
-		if(strlen($newProfileCaption) > 140) {
-			throw(new \RangeException("tweet content too large"));
-		}
-		// store the tweet content
-		$this->profileCaption = $newProfileCaption;
 	}
 	/**
 	 * accessor method for email

@@ -7,44 +7,39 @@ class Clap {
 	use ValidateDate;
 	use ValidateUuid;
 	/**
-	 * id of the article that this clap is for; this is a foreign key
-	 * @var Uuid $clapArticleId
+	 * id of the blog that this clap is for; this is a foreign key
+	 * @var Uuid $clapblogId
 	 **/
-	private $clapArticleId;
+	private $clapblogId;
 	/**
 	 * id of the Profile that sent this clap; this is a foreign key
 	 * @var Uuid $clapProfilId
 	 **/
 	private $clapProfileId;
 	/**
-	 * date and time this clap was sent, in a PHP DateTime object
-	 * @var \DateTime $clapDate
-	 **/
-	private $clapDate;
-	/**
-	 * accessor method for clap article id
+	 * accessor method for clap blog id
 	 *
-	 * @return Uuid value of clap article id
+	 * @return Uuid value of clap blog id
 	 **/
-	public function getClapArticleId() : Uuid{
-		return($this->clapArticleId);
+	public function getClapblogId() : Uuid{
+		return($this->clapblogId);
 	}
 	/**
-	 * mutator method for clap article id
+	 * mutator method for clap blog id
 	 *
-	 * @param string | Uuid $newClapArticleId new value of clap article id
-	 * @throws \RangeException if $newClapArticleId is not positive
-	 * @throws \TypeError if $newClapArticleId is not an integer
+	 * @param string | Uuid $newClapblogId new value of clap blog id
+	 * @throws \RangeException if $newClapblogId is not positive
+	 * @throws \TypeError if $newClapblogId is not an integer
 	 **/
-	public function setClapArticleId($newClapArticleId) : void {
+	public function setClapblogId($newClapblogId) : void {
 		try {
-			$uuid = self::validateUuid($newClapArticleId);
+			$uuid = self::validateUuid($newClapblogId);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
 		// convert and store the profile id
-		$this->clapArticleId= $uuid;
+		$this->clapblogId= $uuid;
 	}
 	/**
 	 * accessor method for clap profile id
@@ -70,35 +65,5 @@ class Clap {
 		}
 		// convert and store the profile id
 		$this->clapProfileId = $uuid;
-	}
-	/**
-	 * accessor method for clap date
-	 *
-	 * @return \DateTime value of clap date
-	 **/
-	public function getClapDate() : \DateTime {
-		return($this->clapDate);
-	}
-	/**
-	 * mutator method for clap date
-	 *
-	 * @param \DateTime|string|null $newClapDate clap date as a DateTime object or string (or null to load the current time)
-	 * @throws \InvalidArgumentException if $newClapDate is not a valid object or string
-	 * @throws \RangeException if $newClapDate is a date that does not exist
-	 **/
-	public function setClapDate($newClapDate = null) : void {
-		// base case: if the date is null, use the current date and time
-		if($newClapDate === null) {
-			$this->clapDate = new \DateTime();
-			return;
-		}
-		// store the like date using the ValidateDate trait
-		try {
-			$newClapDate = self::validateDateTime($newClapDate);
-		} catch(\InvalidArgumentException | \RangeException $exception) {
-			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 0, $exception));
-		}
-		$this->clapDate = $newClapDate;
 	}
 }
