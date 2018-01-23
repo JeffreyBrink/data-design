@@ -32,11 +32,6 @@ class blog {
 	 **/
 	private $blogContent;
 	/**
-	 * date and time the blog was published in a PHP date time object
-	 * @var \DateTime $blogDate
-	 **/
-	private $blogDate;
-	/**
 	 * constructor for this blog
 	 *
 	 * @param string|Uuid $newblogId id of this blog or null if a new blog
@@ -52,9 +47,8 @@ class blog {
 	public function __construct($newblogId, $newblogProfileId, string $newblogContent, $newblogDate = null) {
 		try {
 			$this->setblogId($newblogId);
-			$this->setblogAuthorProfileId($newblogProfileId);
+			$this->setblogProfileId($newblogProfileId);
 			$this->setblogContent($newblogContent);
-			$this->setblogDate($newblogDate);
 		} //determine what exception type was thrown
 		catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			$exceptionType = get_class($exception);
@@ -141,34 +135,5 @@ class blog {
 		// store the blog content
 		$this->blogContent = $newblogContent;
 	}
-	/**
-	 * accessor method for blog date
-	 *
-	 * @return \DateTime value of blog date
-	 **/
-	public function getblogDate(): \DateTime {
-		return ($this->blogDate);
-	}
-	/**
-	 * mutator method for blog date
-	 *
-	 * @param \DateTime|string|null $newblogDate blog date as a DateTime object or string (or null to load the current time)
-	 * @throws \InvalidArgumentException if $newblogDate is not a valid object or string
-	 * @throws \RangeException if $newblogDate is a date that does not exist
-	 **/
-	public function setblogDate($newblogDate = null): void {
-		// base case: if the date is null, use the current date and time
-		if($newblogDate === null) {
-			$this->blogDate = new \DateTime();
-			return;
-		}
-		// store the like date using the ValidateDate trait
-		try {
-			$newblogDate = self::validateDateTime($newblogDate);
-		} catch(\InvalidArgumentException | \RangeException $exception) {
-			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 0, $exception));
-		}
-		$this->blogDate = $newblogDate;
-	}
+
 }
