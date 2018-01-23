@@ -171,4 +171,4 @@ class blog {
 		}
 		$this->blogDate = $newblogDate;
 	}
-}}
+}
