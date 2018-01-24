@@ -159,5 +159,198 @@ class blog {
 		$parameters = ["blogId" => $this->blogId->getBytes(), "blogProfileId" => $this->blogProfileId->getBytes(), "blogContent" => $this->blogContent, "blogDate" => $formattedDate];
 		$statement->execute($parameters);
 	}
+
+	/**
+	 * deletes this blog from mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function delete(\PDO $pdo): void {
+		// create query template
+		$query = "DELETE FROM blog WHERE blogId = :blogId";
+		$statement = $pdo->prepare($query);
+		// bind the member variables to the place holder in the template
+		$parameters = ["blogId" => $this->blogId->getBytes()];
+		$statement->execute($parameters);
+	}
+
+
+	/**
+	 * updates this blog in mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function update(\PDO $pdo): void {
+		// create query template
+		$query = "UPDATE blog SET blogProfileId = :blogProfileId, blogContent = :blogContent, WHERE blogId = :blogId";
+		$statement = $pdo->prepare($query);
+		$parameters = ["blogId" => $this->blogId->getBytes(), "blogProfileId" => $this->blogProfileId->getBytes(), "blogContent" => $this->blogContent, "blogDate"];
+		$statement->execute($parameters);
+	}
+
+
+	/**
+	 * gets the blog by blogId
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param string $blogId blog id to search for
+	 * @return blog|null blog found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when a variable are not the correct data type
+	 **/
+	public static function getblogByblogId(\PDO $pdo, string $blogId): ?blog {
+		// sanitize the blogId before searching
+		try {
+			$blogId = self::validateUuid($blogId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		// create query template
+		$query = "SELECT blogId, blogProfileId, blogContent, blogDate FROM blog WHERE blogId = :blogId";
+		$statement = $pdo->prepare($query);
+		// bind the blog id to the place holder in the template
+		$parameters = ["blogId" => $blogId->getBytes()];
+		$statement->execute($parameters);
+		// grab the blog from mySQL
+		try {
+			$blog = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$blog = new blog($row["blogId"], $row["blogProfileId"], $row["blogContent"], $row["blogDate"]);
+			}
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return ($blog);
+	}
+
+
+	/**
+	 * gets the blog by profile id
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param string $blogProfileId profile id to search by
+	 * @return \SplFixedArray SplFixedArray of blogs found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getblogByblogProfileId(\PDO $pdo, string $blogProfileId): \SPLFixedArray {
+		try {
+			$blogProfileId = self::validateUuid($blogProfileId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		// create query template
+		$query = "SELECT blogId, blogProfileId, blogContent, FROM blog WHERE blogProfileId = :blogProfileId";
+		$statement = $pdo->prepare($query);
+		// bind the blog profile id to the place holder in the template
+		$parameters = ["blogProfileId" => $blogProfileId->getBytes()];
+		$statement->execute($parameters);
+		// build an array of blogs
+		$blogs = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$blog = new blog($row["blogId"], $row["blogProfileId"], $row["blogContent"], $row["blogDate"]);
+				$blogs[$blogs->key()] = $blog;
+				$blogs->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($blogs);
+		}
+
+		/**
+ * gets the blog by content
+ * @param \PDO $pdo PDO connection object
+ * @param string $blogContent blog content to search for
+ * @return \splFixedArray splFixedArray of blogs found
+ * @throws \PDOException when mySQL related error occur
+ * @throws \TypeError when variables are not the correct data type
+ **/
+public static function getblogByblogContent(\PDO $pdo, string $blogContent) : \SPLFixedArray {
+	// sanitize the description before searching
+	$blogContent = trim($blogContent);
+	$blogContent = filter_var($blogContent, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($blogContent) === true) {
+		throw(new \PDOException("blog content is invalid"));
+	}
+	// escape any mySQL wild cards
+	$blogContent = str_replace("_", "\\_", str_replace("%", "\\%", $blogContent));
+	// create query template
+	$query = "SELECT blogId, blogProfileId, blogContent, blogDate FROM blog WHERE blogContent LIKE :blogContent";
+	$statement = $pdo->prepare($query);
+	// bind the blog content to the place holder in the template
+	$blogContent = "%$blogContent%";
+	$parameters = ["blogContent" => $blogContent];
+	$statement->execute($parameters);
+	// build an array of blogs
+	$blogs = new \SplFixedArray($statement->rowCount());
+	$statement->setFetchMode(\PDO::FETCH_ASSOC);
+	while(($row = $statement->fetch()) !== false) {
+		try {
+			$blog = new blog($row["blogId"], $row["blogProfileId"], $row["blogContent"], $row["blogDate"]);
+			$blogs[$blogs->key()] = $blog;
+			$blogs->next();
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+	}
+	return($blogs);
 }
+
+/**
+ * gets all blogs
+ *
+ * @param \PDO $pdo PDO connection object
+ * @return \SplFixedArray SplFixedArray of blogs found or null if not found
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError when variables are not the correct data type
+ **/
+public static function getAllblogs(\PDO $pdo) : \SPLFixedArray {
+	// create query template
+	$query = "SELECT blogId, blogProfileId, blogContent FROM blog";
+	$statement = $pdo->prepare($query);
+	$statement->execute();
+
+	// build an array of blogs
+	$blogs = new \SplFixedArray($statement->rowCount());
+	$statement->setFetchMode(\PDO::FETCH_ASSOC);
+	while(($row = $statement->fetch()) !== false) {
+		try {
+			$blog = new blog($row["blogId"], $row["blogProfileId"], $row["blogContent"]);
+			$blogs[$blogs->key()] = $blog;
+			$blogs->next();
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+	}
+	return ($blogs);
+}
+
+/**
+ * formats the state variables for JSON serialization
+ *
+ * @return array resulting state variables to serialize
+ **/
+public function jsonSerialize() {
+	$fields = get_object_vars($this);
+	$fields["blogId"] = $this->blogId;
+	$fields["blogProfileId"] = $this->blogProfileId;
+	//format the date so that the front end can consume it
+	return($fields);
+		}
+}
+
+
 
