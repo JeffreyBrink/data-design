@@ -12,7 +12,7 @@ CREATE TABLE profile (
 CREATE TABLE blog (
 	blogId        BINARY(16)   NOT NULL,
 	blogProfileId BINARY(16)   NOT NULL,
-	blogContent   VARCHAR(140) NOT NULL,
+	blogContent   VARCHAR(265890) NOT NULL,
 	blogDate      DATETIME(6)  NOT NULL,
 	INDEX (blogProfileId),
 	PRIMARY KEY (blogId),

@@ -31,6 +31,7 @@ class blog {
 	 * @var string $blogContent
 	 **/
 	private $blogContent;
+
 	/**
 	 * constructor for this blog
 	 *
@@ -55,6 +56,7 @@ class blog {
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
 	}
+
 	/**
 	 * accessor method for blog id
 	 *
@@ -63,6 +65,7 @@ class blog {
 	public function getblogId(): Uuid {
 		return ($this->blogId);
 	}
+
 	/**
 	 * mutator method for blog id
 	 *
@@ -77,9 +80,10 @@ class blog {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
-		// convert and store the tweet id
+		// convert and store the blog id
 		$this->blogId = $uuid;
 	}
+
 	/**
 	 * accessor method for blog author's profile id
 	 *
@@ -88,12 +92,13 @@ class blog {
 	public function getblogProfileId(): Uuid {
 		return ($this->blogProfileId);
 	}
+
 	/**
 	 * mutator method for blog author's profile id
 	 *
 	 * @param string | Uuid $newblogAuthorProfileId new value of blog author's profile id
 	 * @throws \RangeException if $newProfileId is not positive
-	 * @throws \TypeError if $newTweetProfileId is not an integer
+	 * @throws \TypeError if $newblogProfileId is not an integer
 	 **/
 	public function setblogProfileId($newblogAuthorProfileId): void {
 		try {
@@ -105,6 +110,7 @@ class blog {
 		// convert and store the profile id
 		$this->blogProfileId = $uuid;
 	}
+
 	/**
 	 * accessor method for blog content
 	 *
@@ -113,6 +119,7 @@ class blog {
 	public function getblogContent(): string {
 		return ($this->blogContent);
 	}
+
 	/**
 	 * mutator method for blog content
 	 *
@@ -122,7 +129,7 @@ class blog {
 	 * @throws \TypeError if $newblogContent is not a string
 	 **/
 	public function setblogContent(string $newblogContent): void {
-		// verify the tweet content is secure
+		// verify the blog content is secure
 		$newblogContent = trim($newblogContent);
 		$newblogContent = filter_var($newblogContent, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newblogContent) === true) {
@@ -136,4 +143,21 @@ class blog {
 		$this->blogContent = $newblogContent;
 	}
 
+	/**
+	 * inserts this blog into mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function insert(\PDO $pdo): void {
+		// create query template
+		$query = "INSERT INTO blog(blogId,blogProfileId, blogContent, blogDate) VALUES(:blogId, :blogProfileId, :blogContent, :blogDate)";
+		$statement = $pdo->prepare($query);
+		// bind the member variables to the place holders in the template
+		$formattedDate = $this->blogDate->format("Y-m-d H:i:s.u");
+		$parameters = ["blogId" => $this->blogId->getBytes(), "blogProfileId" => $this->blogProfileId->getBytes(), "blogContent" => $this->blogContent, "blogDate" => $formattedDate];
+		$statement->execute($parameters);
+	}
 }
+
